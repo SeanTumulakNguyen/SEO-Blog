@@ -27,7 +27,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // routes middlware
-app.use(blogRoutes)
+app.use('/api', blogRoutes)
 
 // port
 const port = process.env.PORT || 8000
