@@ -52,14 +52,14 @@ exports.signin = (req, res) => {
 		}
 
 		// generate a token and send to client
-		const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expireIn: '1d' });
+		const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
 		res.cookie('token', token, { expiresIn: '1d' });
 
 		const { _id, username, name, email, role } = user;
 		return res.json({
 			token,
-			user
+			user: {_id, username, name, email, role}
 		});
 	});
 };
