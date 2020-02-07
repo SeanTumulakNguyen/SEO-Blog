@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { signup } from '../../actions/auth';
+import { signin, authenticate } from '../../actions/auth';
+import Router from 'next/router'
 
-const SignupComponent = () => {
+const SigninComponent = () => {
 	const [
 		values,
 		setValues
 	] = useState({
-		name: '',
 		email: '',
 		password: '',
 		error: '',
@@ -21,23 +21,19 @@ const SignupComponent = () => {
 		e.preventDefault();
 		// console.table({ name, email, password, error, loading, message, showForm })
 		setValues({ ...values, loading: true, error: false });
-		const user = { name, email, password };
+		const user = { email, password };
 
-		signup(user).then((data) => {
+		signin(user).then((data) => {
 			if (data.error) {
 				setValues({ ...values, error: data.error });
 			}
-			else {
-				setValues({
-					...values,
-					name: '',
-					email: '',
-					password: '',
-					error: '',
-					loading: false,
-					message: data.message,
-					showForm: false
-				});
+            else {
+                // save user token to cookie
+                // save user info to localstorage
+				// authenticate user
+				authenticate(data, () => {
+					Router.push(`/`)
+				})
 			}
 		});
 	};
@@ -49,18 +45,9 @@ const SignupComponent = () => {
 	const showError = () => (error ? <div className="alert alert-danger">{error}</div> : '');
 	const showMessage = () => (message ? <div className="alert alert-info">{message}</div> : '');
 
-	const signupForm = () => {
+	const signinForm = () => {
 		return (
 			<form onSubmit={handleSubmit}>
-				<div className="form-group">
-					<input
-						onChange={handleChange('name')}
-						value={name}
-						className="form-control"
-						type="text"
-						placeholder="Type your name"
-					/>
-				</div>
 				<div className="form-group">
 					<input
 						onChange={handleChange('email')}
@@ -91,9 +78,9 @@ const SignupComponent = () => {
 			{showError()}
 			{showLoading()}
 			{showMessage()}
-			{showForm && signupForm()}
+			{showForm && signinForm()}
 		</React.Fragment>
 	);
 };
 
-export default SignupComponent;
+export default SigninComponent;
