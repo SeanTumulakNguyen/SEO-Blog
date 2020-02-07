@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { API } from '../config';
-import cookie from 'js-cookie'
+import cookie from 'js-cookie';
 
 export const signup = (user) => {
 	return fetch(`${API}/signup`, {
@@ -32,62 +32,75 @@ export const signin = (user) => {
 		.catch((err) => console.log(err));
 };
 
-
 // set cookie
 export const setCookie = (key, value) => {
 	if (process.browser) {
 		cookie.set(key, value, {
 			expires: 1
-		})
+		});
 	}
-}
+};
 
 //remove cookie
 export const removeCookie = (key) => {
 	if (process.browser) {
 		cookie.remove(key, {
 			expires: 1
-		})
+		});
 	}
-}
+};
 
 // get cookie
 export const getCookie = (key) => {
 	if (process.browser) {
-		cookie.get(key)
+		return cookie.get(key);
 	}
-}
+};
 
 // localstorage
 export const setLocalStorage = (key, value) => {
 	if (process.browser) {
-		localStorage.setItem(key, JSON.stringify(value))
+		localStorage.setItem(key, JSON.stringify(value));
 	}
-}
+};
 
 export const removeLocalStorage = (key) => {
 	if (process.browser) {
-		localStorage.removeItem(key)
+		localStorage.removeItem(key);
 	}
-}
+};
 
 // authenticate user by pass data to cookie and localstorage
 export const authenticate = (data, next) => {
-	setCookie('token', data.token)
-	setLocalStorage('user', data.user)
+	setCookie('token', data.token);
+	setLocalStorage('user', data.user);
 	next();
-}
+};
 
 export const isAuth = () => {
 	if (process.browser) {
-		const cookieChecked = getCookie('token')
+		const cookieChecked = getCookie('token');
 		if (cookieChecked) {
 			if (localStorage.getItem('user')) {
-				return JSON.parse(localStorage.getItem('user'))
+				return JSON.parse(localStorage.getItem('user'));
 			}
 			else {
-				return false
+				return false;
 			}
 		}
 	}
-}
+};
+
+export const signout = (next) => {
+	removeCookie('token');
+	removeLocalStorage('user');
+	next();
+
+	return fetch(`${API}/signout`, {
+		method: 'GET'
+	})
+		.then((response) => {
+			console.log('signout sucess');
+		})
+		.catch((err) => console.log(err));
+};

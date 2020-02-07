@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { signin, authenticate } from '../../actions/auth';
-import Router from 'next/router'
+import { useState, useEffect } from 'react';
+import { signin, authenticate, isAuth } from '../../actions/auth';
+import Router from 'next/router';
 
 const SigninComponent = () => {
 	const [
@@ -17,6 +17,10 @@ const SigninComponent = () => {
 
 	const { name, email, password, error, loading, message, showForm } = values;
 
+	useEffect(() => {
+		isAuth() && Router.push('/');
+	}, []);
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		// console.table({ name, email, password, error, loading, message, showForm })
@@ -27,13 +31,13 @@ const SigninComponent = () => {
 			if (data.error) {
 				setValues({ ...values, error: data.error });
 			}
-            else {
-                // save user token to cookie
-                // save user info to localstorage
+			else {
+				// save user token to cookie
+				// save user info to localstorage
 				// authenticate user
 				authenticate(data, () => {
-					Router.push(`/`)
-				})
+					Router.push(`/`);
+				});
 			}
 		});
 	};
@@ -67,7 +71,7 @@ const SigninComponent = () => {
 					/>
 				</div>
 				<div>
-					<button className="btn btn-primary float-right">Signup</button>
+					<button className="btn btn-primary float-right">Signin</button>
 				</div>
 			</form>
 		);
