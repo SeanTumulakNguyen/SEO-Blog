@@ -7,7 +7,7 @@ const stripHtml = require('string-strip-html');
 const _ = require('lodash');
 const { errorHandler } = require('../helpers/dbErrorHandler');
 const fs = require('fs');
-const { smartTrim } = require('../helpers/blog')
+const { smartTrim } = require('../helpers/blog');
 
 exports.create = (req, res) => {
 	let form = new formidable.IncomingForm();
@@ -46,7 +46,7 @@ exports.create = (req, res) => {
 		let blog = new Blog();
 		blog.title = title;
 		blog.body = body;
-		blog.excerpt = smartTrim(body, 320, ' ', '...')
+		blog.excerpt = smartTrim(body, 320, ' ', '...');
 		blog.slug = slugify(title).toLowerCase();
 		blog.mtitle = `${title} | ${process.env.APP_NAME}`;
 		blog.mdescription = stripHtml(body.substring(0, 160));
@@ -82,8 +82,7 @@ exports.create = (req, res) => {
 					return res.status(400).json({
 						error: errorHandler(err)
 					});
-				}
-				else {
+				} else {
 					Blog.findByIdAndUpdate(
 						result._id,
 						{ $push: { tags: arrayOfTags } },
@@ -93,8 +92,7 @@ exports.create = (req, res) => {
 							return res.status(400).json({
 								error: errorHandler(err)
 							});
-						}
-						else {
+						} else {
 							res.json(result);
 						}
 					});
@@ -114,25 +112,61 @@ exports.list = (req, res) => {
 			if (err) {
 				return res.json({
 					error: errorHandler(err)
-				})
+				});
 			}
-			res.json({ data })
-		})
-}
+			res.json({ data });
+		});
+};
 
 exports.listAllBlogsCategoriesTags = (req, res) => {
+	let limit = req.body.limit ? parseInt(req.body.limit) : 10;
+	let skip = req.body.skip ? parseInt(req.body.skip) : 0;
 
+	let blogs;
+	let categories;
+	let tags;
+
+	Blog.find({})
+		.populate('categories', '_id name slug')
+		.populate('tag', '_id name slug')
+		.populate('postedBy', '_id name username profile')
+		.sort({ createdAt: -1 })
+		.skip(skip)
+		.limit(limit)
+		.select('_id title slug excerpt categories tags postedBy createdAt updatedAt')
+		.exec((err, data) => {
+			if (err) {
+				return res.json({
+					error: errorHandler(err)
+				});
+			}
+			blogs = data //blogs
+
+			Category.find({}).exec((err, c) => {
+				if (err) {
+					return res.json({
+						error: errorHandler(err)
+					});
+				}
+				categories = c //categories
+			})
+
+			Tag.find({}).exec((err, t) => {
+				if (err) {
+					return res.json({
+						error: errorHandler(err)
+					});
+				}
+				tags = t //tags
+
+				//return all blogs categories tags
+				res.json({blogs, categories, tags, size: blogs.length})
+			})
+		});
 };
 
-exports.read = (req, res) => {
+exports.read = (req, res) => {};
 
-};
+exports.remove = (req, re) => {};
 
-exports.remove = (req, re) => {
-
-}
-
-exports.update = (req, res) => {
-
-}
-
+exports.update = (req, res) => {};
