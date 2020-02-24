@@ -66,6 +66,7 @@ exports.create = (req, res) => {
 		}
 
 		blog.save((err, result) => {
+			// console.log('Blog Create Error', err)
 			if (err) {
 				return res.status(400).json({
 					error: errorHandler(err)
