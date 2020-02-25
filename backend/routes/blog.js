@@ -15,4 +15,6 @@ router.delete('/blog/:slug', requireSignin, adminMiddleware, remove)
 
 router.put('/blog/:slug', requireSignin, adminMiddleware, update)
 
+router.get('/blog/photo/:slug', photo)
+
 module.exports = router;
