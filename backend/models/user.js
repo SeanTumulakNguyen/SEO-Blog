@@ -50,7 +50,7 @@ const userSchema = new mongoose.Schema(
 			defatul: ''
 		}
 	},
-	{ timestamp: true }
+	{ timestamps: true }
 );
 
 userSchema
