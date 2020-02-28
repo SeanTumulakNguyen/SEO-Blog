@@ -72,7 +72,7 @@ const Blogs = ({ blogs, categories, tags, totalBlogs, blogsLimit, blogsSkip, rou
 		return (
 			size > 0 &&
 			size >= limit && (
-				<button onClick={loadMore} className="btn btn-primary btn-lg">
+				<button onClick={loadMore} className="btn btn-outline-primary btn-lg">
 					Load more
 				</button>
 			)
