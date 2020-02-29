@@ -11,8 +11,16 @@ const SingleBlog = ({ blog }) => {
 			<Layout>
 				<main>
 					<article>
-						<div className="contiainer-fluid">
-							<section>{JSON.stringify(blog)}</section>
+						<div className="container-fluid">
+							<section>
+								<div className="row" style={{ marginTop: '-30px' }}>
+									<img
+										src={`${API}/blog/photo/${blog.slug}`}
+										alt={blog.title}
+										className="img img-fluid featured-image"
+									/>
+								</div>
+							</section>
 						</div>
 					</article>
 				</main>
@@ -25,8 +33,7 @@ SingleBlog.getInitialProps = ({ query }) => {
 	return singleBlog(query.slug).then((data) => {
 		if (data.error) {
 			console.log(data.error);
-		}
-		else {
+		} else {
 			return { blog: data };
 		}
 	});
