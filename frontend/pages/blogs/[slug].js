@@ -8,6 +8,28 @@ import moment from 'moment';
 import renderHTML from 'react-render-html';
 
 const SingleBlog = ({ blog }) => {
+	const head = () => {
+		return (
+			<Head>
+				<title>
+					{blog.title} | {APP_NAME}{' '}
+				</title>
+				<meta name="description" content={blog.mdesc} />
+				<link rel="canonical" href={`${DOMAIN}/blogs/${router.pathname}`} />
+				<meta property="og:title" content={`${blog.title} | ${APP_NAME}`} />
+				<meta property="og:description" content={mdesc} />
+				<meta property="og:type" content="website" />
+				<meta property="og:url" content={`${DOMAIN}/blogs/${router.pathname}`} />
+				<meta property="og:site_name" content={`${APP_NAME}`} />
+
+				<meta property="og:image" content={`${API}/blog/photo/${blog.slug}`} />
+				<meta property="og:image:secure_url" content={`${DOMAIN}/static/images/seoblog.jpg`} />
+				<meta property="og:image:type" content="image/jpg" />
+				<meta property="fb_app_id" content={`${FB_APP_ID}`} />
+			</Head>
+		);
+	};
+
 	const showBlogCategories = (blog) => {
 		return blog.categories.map((c, i) => (
 			<Link key={i} href={`/categories/${c.slug}`}>
@@ -40,34 +62,33 @@ const SingleBlog = ({ blog }) => {
 								</div>
 							</section>
 							<section>
-								<p className="lead mt-3 mark">
-									Written by {blog.postedBy.name} | Published {moment(blog.updatedAt).fromNow()}
-								</p>
+								<div className="container">
+									<h1 className="display-2 pb-3 text-center font-weight-bold pt-3">{blog.title}</h1>
+									<p className="lead mt-3 mark">
+										Written by {blog.postedBy.name} | Published {moment(blog.updatedAt).fromNow()}
+									</p>
 
-								<div className="pb-3">
-									{showBlogCategories(blog)}
-									{showBlogTags(blog)}
-									<br />
-									<br />
+									<div className="pb-3">
+										{showBlogCategories(blog)}
+										{showBlogTags(blog)}
+										<br />
+										<br />
+									</div>
 								</div>
 							</section>
 						</div>
 
-						<div className='container'>
+						<div className="container">
 							<section>
-								<div className='col-md-12 lead'>
-									{renderHTML(blog.body)}
-								</div>
+								<div className="col-md-12 lead">{renderHTML(blog.body)}</div>
 							</section>
 						</div>
-						<div className='container pb-5'>
-							<h4 className='text-center pt-5 pb-5 h2'>
-								Related blogs
-							</h4>
+						<div className="container pb-5">
+							<h4 className="text-center pt-5 pb-5 h2">Related blogs</h4>
 							<hr />
 							<p>show related blogs</p>
 						</div>
-						<div className='container pb-5'>
+						<div className="container pb-5">
 							<p>show comments</p>
 						</div>
 					</article>
