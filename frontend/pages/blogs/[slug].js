@@ -7,7 +7,7 @@ import { API, DOMAIN, APP_NAME, FB_APP_ID } from '../../config';
 import moment from 'moment';
 import renderHTML from 'react-render-html';
 
-const SingleBlog = ({ blog }) => {
+const SingleBlog = ({ blog, query }) => {
 	const head = () => {
 		return (
 			<Head>
@@ -15,15 +15,15 @@ const SingleBlog = ({ blog }) => {
 					{blog.title} | {APP_NAME}{' '}
 				</title>
 				<meta name="description" content={blog.mdesc} />
-				<link rel="canonical" href={`${DOMAIN}/blogs/${router.pathname}`} />
+				<link rel="canonical" href={`${DOMAIN}/blogs/${query.slug}`} />
 				<meta property="og:title" content={`${blog.title} | ${APP_NAME}`} />
-				<meta property="og:description" content={mdesc} />
+				<meta property="og:description" content={blog.mdesc} />
 				<meta property="og:type" content="website" />
-				<meta property="og:url" content={`${DOMAIN}/blogs/${router.pathname}`} />
+				<meta property="og:url" content={`${DOMAIN}/blogs/${query.slug}`} />
 				<meta property="og:site_name" content={`${APP_NAME}`} />
 
 				<meta property="og:image" content={`${API}/blog/photo/${blog.slug}`} />
-				<meta property="og:image:secure_url" content={`${DOMAIN}/static/images/seoblog.jpg`} />
+				<meta property="og:image:secure_url" content={`${API}/blog/photo/${blog.slug}`} />
 				<meta property="og:image:type" content="image/jpg" />
 				<meta property="fb_app_id" content={`${FB_APP_ID}`} />
 			</Head>
@@ -48,6 +48,7 @@ const SingleBlog = ({ blog }) => {
 
 	return (
 		<React.Fragment>
+			{head()}
 			<Layout>
 				<main>
 					<article>
@@ -103,7 +104,7 @@ SingleBlog.getInitialProps = ({ query }) => {
 		if (data.error) {
 			console.log(data.error);
 		} else {
-			return { blog: data };
+			return { blog: data, query };
 		}
 	});
 };
