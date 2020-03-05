@@ -48,7 +48,7 @@ const Card = ({ blog }) => {
 				</div>
 				<div className="col-md-8">
 					<section>
-						<div className="pb-3 text-break">{renderHTML(blog.excerpt)}</div>
+						<div className="pb-3 text-wrap">{renderHTML(blog.excerpt)}</div>
 						<Link href={`/blogs/${blog.slug}`}>
 							<a className="btn btn-primary pt-2">Read more </a>
 						</Link>
