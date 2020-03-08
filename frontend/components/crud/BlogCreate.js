@@ -119,7 +119,7 @@ const CreateBlog = ({ router }) => {
     const handleTagsToggle = t => () => {
         setValues({ ...values, error: '' });
         // return the first index or -1
-        const clickedTag = checked.indexOf(t);
+        const clickedTag = checkedTag.indexOf(t);
         const all = [...checkedTag];
 
         if (clickedTag === -1) {
