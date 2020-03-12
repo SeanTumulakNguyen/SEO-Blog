@@ -105,19 +105,19 @@ exports.create = (req, res) => {
 };
 
 exports.list = (req, res) => {
-    Blog.find({})
-        .populate('categories', '_id name slug')
-        .populate('tags', '_id name slug')
-        .populate('postedBy', '_id name username')
-        .select('_id title slug excerpt categories tags postedBy createdAt updatedAt')
-        .exec((err, data) => {
-            if (err) {
-                return res.json({
-                    error: errorHandler(err)
-                });
-            }
-            res.json(data);
-        });
+	Blog.find({})
+		.populate('categories', '_id name slug')
+		.populate('tags', '_id name slug')
+		.populate('postedBy', '_id name username')
+		.select('_id title slug excerpt categories tags postedBy createdAt updatedAt')
+		.exec((err, data) => {
+			if (err) {
+				return res.json({
+					error: errorHandler(err)
+				});
+			}
+			res.json(data);
+		});
 };
 
 exports.listAllBlogsCategoriesTags = (req, res) => {
@@ -285,9 +285,32 @@ exports.listRelated = (req, res) => {
 		.exec((err, blogs) => {
 			if (err) {
 				return res.status(400).json({
-				error: 'Blogs not found'
-				})
+					error: 'Blogs not found'
+				});
 			}
-			res.json(blogs)
-	})
+			res.json(blogs);
+		});
+};
+
+exports.listSearch = (req, res) => {
+	console.log(req.query);
+	const { search } = req.query;
+	if (search) {
+		Blog.find(
+			{
+				$or: [
+					{ title: { $regex: search, $options: 'i' } },
+					{ body: { $regex: search, $options: 'i' } }
+				]
+			},
+			(err, blogs) => {
+				if (err) {
+					return res.status(400).json({
+						error: errorHandler(err)
+					});
+				}
+				res.json(blogs);
+			}
+		).select('-photo -body');
+	}
 };
