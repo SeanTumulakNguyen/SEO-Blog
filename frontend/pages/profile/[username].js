@@ -5,19 +5,7 @@ import { userPublicProfile } from '../../actions/user';
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from '../../config';
 import moment from 'moment';
 
-const userProfile = ({ user, blogs, query }) => {
-	const showUserBlogs = () => {
-		return blogs.map((blogs, i) => {
-			return (
-				<div className="mt-4 mb-4" key={i}>
-					<Link href={`/blog/${blog.slog}`}>
-						<a className="lead">{blog.title}</a>
-					</Link>
-				</div>
-			);
-		});
-	};
-
+const UserProfile = ({ user, blogs, query }) => {
 	const head = () => {
 		return (
 			<Head>
@@ -39,6 +27,19 @@ const userProfile = ({ user, blogs, query }) => {
 		);
 	};
 
+	const showUserBlogs = () => {
+        return blogs.map((blog, i) => {
+            return (
+                <div className="mt-4 mb-4" key={i}>
+                    <Link href={`/blogs/${blog.slug}`}>
+                        <a className="lead">{blog.title}</a>
+                    </Link>
+                </div>
+            );
+        });
+    };
+	
+
 	return (
 		<React.Fragment>
 			{head()}
@@ -48,7 +49,7 @@ const userProfile = ({ user, blogs, query }) => {
 						<div className="col-md-12">
 							<div className="card">
 								<div className="card-body">
-									<h5>{user.naame}</h5>
+									<h5>{user.name}</h5>
 									<Link href={`${user.profile}`}>
 										<a>View Profile</a>
 									</Link>
@@ -89,15 +90,16 @@ const userProfile = ({ user, blogs, query }) => {
 	);
 };
 
-userProfile.getInitialProps = ({ query }) => {
-	return userPublicProfile(query.username).then((data) => {
-		if (data.error) {
-			console.log(data.error);
-		} else {
-			console.log(data);
-			return { user: data.user, blogs: data.blogs, query };
-		}
-	});
+UserProfile.getInitialProps = ({ query }) => {
+    // console.log(query);
+    return userPublicProfile(query.username).then(data => {
+        if (data.error) {
+            console.log(data.error);
+        } else {
+            console.log(data);
+            return { user: data.user, blogs: data.blogs, query };
+        }
+    });
 };
 
-export default userProfile;
+export default UserProfile;

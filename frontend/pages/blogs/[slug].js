@@ -6,25 +6,24 @@ import { singleBlog, listRelated } from '../../actions/blog';
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from '../../config';
 import moment from 'moment';
 import renderHTML from 'react-render-html';
-import SmallCard from '../../components/blog/SmallCard'
+import SmallCard from '../../components/blog/SmallCard';
 
 const SingleBlog = ({ blog, query }) => {
-	const [related, setRelated] = useState([])
+	const [ related, setRelated ] = useState([]);
 
 	const loadRelated = () => {
-		listRelated({ blog }).then(data => {
+		listRelated({ blog }).then((data) => {
 			if (data.error) {
-				console.log(data.error)
+				console.log(data.error);
+			} else {
+				setRelated(data);
 			}
-			else {
-				setRelated(data)
-			}
-		})
-	}
+		});
+	};
 
 	useEffect(() => {
-		loadRelated()
-	}, [])
+		loadRelated();
+	}, []);
 
 	const head = () => {
 		return (
@@ -71,8 +70,8 @@ const SingleBlog = ({ blog, query }) => {
 					<SmallCard blog={blog} />
 				</article>
 			</div>
-		))
-	}
+		));
+	};
 
 	return (
 		<React.Fragment>
@@ -94,7 +93,11 @@ const SingleBlog = ({ blog, query }) => {
 								<div className="container">
 									<h1 className="display-2 pb-3 text-center font-weight-bold pt-3">{blog.title}</h1>
 									<p className="lead mt-3 mark">
-										Written by {blog.postedBy.name} | Published {moment(blog.updatedAt).fromNow()}
+										Written by{' '}
+										<Link href={`/profile/${blog.postedBy.username}`}>
+											<a>{blog.postedBy.username}</a>
+										</Link>{' '}
+										| Published {moment(blog.updatedAt).fromNow()}
 									</p>
 
 									<div className="pb-3">
@@ -115,9 +118,7 @@ const SingleBlog = ({ blog, query }) => {
 						<div className="container pb-5">
 							<h4 className="text-center pt-5 pb-5 h2">Related blogs</h4>
 							<hr />
-							<div className="row">
-							{showRelatedBlog()}
-							</div>
+							<div className="row">{showRelatedBlog()}</div>
 						</div>
 						<div className="container pb-5">
 							<p>show comments</p>
