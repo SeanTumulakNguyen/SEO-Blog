@@ -28,17 +28,16 @@ const UserProfile = ({ user, blogs, query }) => {
 	};
 
 	const showUserBlogs = () => {
-        return blogs.map((blog, i) => {
-            return (
-                <div className="mt-4 mb-4" key={i}>
-                    <Link href={`/blogs/${blog.slug}`}>
-                        <a className="lead">{blog.title}</a>
-                    </Link>
-                </div>
-            );
-        });
-    };
-	
+		return blogs.map((blog, i) => {
+			return (
+				<div className="mt-4 mb-4" key={i}>
+					<Link href={`/blogs/${blog.slug}`}>
+						<a className="lead">{blog.title}</a>
+					</Link>
+				</div>
+			);
+		});
+	};
 
 	return (
 		<React.Fragment>
@@ -49,11 +48,15 @@ const UserProfile = ({ user, blogs, query }) => {
 						<div className="col-md-12">
 							<div className="card">
 								<div className="card-body">
-									<h5>{user.name}</h5>
-									<Link href={`${user.profile}`}>
-										<a>View Profile</a>
-									</Link>
-									<p className="text-muted">Joined {moment(user.createdAt).fromNow()}</p>
+									<div className="row">
+										<div className="col-md-8">
+											<h5>{user.name}</h5>
+											<p className="text-muted">Joined {moment(user.createdAt).fromNow()}</p>
+										</div>
+										<div className='col-md-4'>
+										<img src={`${API}/user/photo/${user.username}`} className='img img-fluid img-thumbnail mb-3' style={{maxHeight: '100px', maxWidth: '100%'}} alt='user profile' />
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -91,15 +94,16 @@ const UserProfile = ({ user, blogs, query }) => {
 };
 
 UserProfile.getInitialProps = ({ query }) => {
-    // console.log(query);
-    return userPublicProfile(query.username).then(data => {
-        if (data.error) {
-            console.log(data.error);
-        } else {
-            console.log(data);
-            return { user: data.user, blogs: data.blogs, query };
-        }
-    });
+	// console.log(query);
+	return userPublicProfile(query.username).then((data) => {
+		if (data.error) {
+			console.log(data.error);
+		}
+		else {
+			console.log(data);
+			return { user: data.user, blogs: data.blogs, query };
+		}
+	});
 };
 
 export default UserProfile;

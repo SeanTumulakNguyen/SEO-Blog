@@ -22,8 +22,9 @@ export const getProfile = (token) => {
 			Authorization: `Bearer ${token}`
 		},
 	})
-		.then((response) => {
-			return response.json();
+		.then((res) => {
+			console.log(res)
+			return res.json();
 		})
 		.catch((err) => console.log(err));
 };
@@ -35,6 +36,7 @@ export const update = (token, user) => {
 			Accept: 'application/json',
 			Authorization: `Bearer ${token}`
 		},
+		body: user
 	})
 		.then((response) => {
 			return response.json();

@@ -46,24 +46,25 @@ exports.publicProfile = (req, res) => {
 };
 
 exports.photo = (req, res) => {
-    const username = req.params.username
+	const username = req.params.username;
 
-    User.findOne({ username }).exec((err, user) => {
-        if (err || !user) {
-            return res.status(400).json({
-                error: 'User not found'
-            })
-        }
+	User.findOne({ username }).exec((err, user) => {
+		if (err || !user) {
+			return res.status(400).json({
+				error: 'User not found'
+			});
+		}
 
-        if (user.photo.data) {
-            res.set('Content-Type', user.photo.contentType)
-            return res.send(user.photo.data)
-        }
-    })
+		if (user.photo.data) {
+			res.set('Content-Type', user.photo.contentType);
+			return res.send(user.photo.data);
+		}
+	});
 };
 
 exports.update = (req, res) => {
 	let form = new formidable.IncomingForm();
+	form.keepExtensions = true
 	form.parse(req, (err, fields, files) => {
 		if (err) {
 			return res.status(400).json({
@@ -83,16 +84,22 @@ exports.update = (req, res) => {
 			}
 			user.photo.data = fs.readFileSync(files.photo.path);
 			user.photo.contentType = files.photo.type;
-
-			user.save((err, result) => {
-				if (err) {
-					return res.status(400).json({
-						error: errorHandler(err)
-					});
-				}
-				user.hashed_password = undefined;
-				res.json(user);
-			});
 		}
+
+		if (fields.password && fields.password.length < 6) {
+			return res.status(400).json({
+				error: 'Password should be min 6 characters long'
+			})
+		}
+
+		user.save((err, result) => {
+			if (err) {
+				return res.status(400).json({
+					error: errorHandler(err)
+				});
+			}
+			user.hashed_password = undefined;
+			res.json(user);
+		});
 	});
 };
