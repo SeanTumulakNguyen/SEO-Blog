@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import Router from 'next/router';
-import { getCookie, isAuth } from '../../actions/auth';
+import { getCookie, isAuth, updateUser } from '../../actions/auth';
 import { getProfile, update } from '../../actions/user';
-import { API } from '../../config'
+import { API } from '../../config';
 
 const ProfileUpdate = () => {
 	const [
@@ -63,14 +63,16 @@ const ProfileUpdate = () => {
 				setValues({ ...values, error: data.error, success: false, loading: false });
 			}
 			else {
-				setValues({
-					...values,
-					username: data.username,
-					name: data.name,
-					email: data.email,
-					about: data.about,
-					success: true,
-					loading: false
+				updateUser(data, () => {
+					setValues({
+						...values,
+						username: data.username,
+						name: data.name,
+						email: data.email,
+						about: data.about,
+						success: true,
+						loading: false
+					});
 				});
 			}
 		});
@@ -135,7 +137,12 @@ const ProfileUpdate = () => {
 			<div className="container">
 				<div className="row">
 					<div className="col-md-4">
-						<img src={`${API}/user/photo/${username}`} className='img img-fluid img-thumbnail mb-3' style={{maxHeight: 'auto', maxWidth: '100%'}} alt='user profile' />
+						<img
+							src={`${API}/user/photo/${username}`}
+							className="img img-fluid img-thumbnail mb-3"
+							style={{ maxHeight: 'auto', maxWidth: '100%' }}
+							alt="user profile"
+						/>
 					</div>
 					<div className="col-md-8 mb-5">
 						{showSuccess()}
@@ -149,4 +156,4 @@ const ProfileUpdate = () => {
 	);
 };
 
-export default ProfileUpdate
+export default ProfileUpdate;

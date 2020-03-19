@@ -100,7 +100,7 @@ UserProfile.getInitialProps = ({ query }) => {
 			console.log(data.error);
 		}
 		else {
-			console.log(data);
+			// console.log(data);
 			return { user: data.user, blogs: data.blogs, query };
 		}
 	});
