@@ -24,6 +24,7 @@ const SmallCard = ({ blog }) => {
 						<a>
 							<h5 className="card-title">{blog.title}</h5>
 						</a>
+						
 					</Link>
 					<p className="card-text">{renderHTML(blog.excerpt)}</p>
 				</section>
