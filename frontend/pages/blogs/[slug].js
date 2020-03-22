@@ -7,15 +7,20 @@ import { API, DOMAIN, APP_NAME, FB_APP_ID } from '../../config';
 import moment from 'moment';
 import renderHTML from 'react-render-html';
 import SmallCard from '../../components/blog/SmallCard';
+import DisqusThread from '../../components/DisqusThread';
 
 const SingleBlog = ({ blog, query }) => {
-	const [ related, setRelated ] = useState([]);
+	const [
+		related,
+		setRelated
+	] = useState([]);
 
 	const loadRelated = () => {
 		listRelated({ blog }).then((data) => {
 			if (data.error) {
 				console.log(data.error);
-			} else {
+			}
+			else {
 				setRelated(data);
 			}
 		});
@@ -73,6 +78,14 @@ const SingleBlog = ({ blog, query }) => {
 		));
 	};
 
+	const showComments = () => {
+		return (
+			<div>
+				<DisqusThread id={blog.id} title={blog.title} path={`/blog/${blog.slug}`} />
+			</div>
+		);
+	};
+
 	return (
 		<React.Fragment>
 			{head()}
@@ -120,9 +133,7 @@ const SingleBlog = ({ blog, query }) => {
 							<hr />
 							<div className="row">{showRelatedBlog()}</div>
 						</div>
-						<div className="container pb-5">
-							<p>show comments</p>
-						</div>
+						<div className="container pt-5 pb-5">{showComments()}</div>
 					</article>
 				</main>
 			</Layout>
@@ -134,7 +145,8 @@ SingleBlog.getInitialProps = ({ query }) => {
 	return singleBlog(query.slug).then((data) => {
 		if (data.error) {
 			console.log(data.error);
-		} else {
+		}
+		else {
 			return { blog: data, query };
 		}
 	});
