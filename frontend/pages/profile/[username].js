@@ -4,6 +4,7 @@ import Layout from '../../components/Layout';
 import { userPublicProfile } from '../../actions/user';
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from '../../config';
 import moment from 'moment';
+import ContactForm from '../../components/form/ContactForm';
 
 const UserProfile = ({ user, blogs, query }) => {
 	const head = () => {
@@ -53,8 +54,13 @@ const UserProfile = ({ user, blogs, query }) => {
 											<h5>{user.name}</h5>
 											<p className="text-muted">Joined {moment(user.createdAt).fromNow()}</p>
 										</div>
-										<div className='col-md-4'>
-										<img src={`${API}/user/photo/${user.username}`} className='img img-fluid img-thumbnail mb-3' style={{maxHeight: '100px', maxWidth: '100%'}} alt='user profile' />
+										<div className="col-md-4">
+											<img
+												src={`${API}/user/photo/${user.username}`}
+												className="img img-fluid img-thumbnail mb-3"
+												style={{ maxHeight: '100px', maxWidth: '100%' }}
+												alt="user profile"
+											/>
 										</div>
 									</div>
 								</div>
@@ -82,7 +88,7 @@ const UserProfile = ({ user, blogs, query }) => {
 										Message {user.name}
 									</h5>
 									<br />
-									<p>contact form</p>
+									<ContactForm authorEmail={user.email} />
 								</div>
 							</div>
 						</div>
