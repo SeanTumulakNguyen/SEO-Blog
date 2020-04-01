@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { signin, authenticate, isAuth } from '../../actions/auth';
 import Router from 'next/router';
 import Link from 'next/link'
+import LoginGoogle from './LoginGoogle'
 
 const SigninComponent = () => {
 	const [
@@ -88,6 +89,7 @@ const SigninComponent = () => {
 			{showError()}
 			{showLoading()}
 			{showMessage()}
+			<LoginGoogle />
 			{showForm && signinForm()}
 			<br />
 			<br />
