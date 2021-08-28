@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import jwt from 'jsonwebtoken';
-import Layout from '../../../../components/auth';
+import Layout from '../../../../components/Layout';
 import { withRouter } from 'next/router';
 import { signup } from '../../../../actions/auth';
 

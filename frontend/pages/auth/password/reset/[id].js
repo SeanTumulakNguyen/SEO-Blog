@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Layout from '../../../../components/auth';
+import Layout from '../../../../components/Layout';
 import { withRouter } from 'next/router';
 import { resetPassword } from '../../../../actions/auth';
 
@@ -15,7 +15,7 @@ const ResetPassword = ({ router }) => {
 		showForm: true
 	});
 
-	const { name, newPassword, error, message } = values;
+	const { name, newPassword, error, message, showForm } = values;
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
